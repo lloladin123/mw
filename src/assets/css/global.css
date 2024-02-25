@@ -7,7 +7,37 @@ a {
     color: white;
 }
 
-.btn:hover {
-    background-color: #9cd7dc;
-    color: black;
+.btn {
+    transition: color 0.3 ease-in-out 0.3 !important;
+    background-color: #886588ff;
+    color: white;
 }
+
+.btn:hover  { 
+    background-color: #9cd7dc !important; 
+    color: black !important;
+}
+
+
+.blogSearch {
+    margin: auto;
+    margin-top: 2vh;
+    width: 70%;
+    }
+  
+  .blogPagination a {
+    margin: 1vh;
+    transition: color 0.1s ease-in-out 0.1s;
+    font-size: 3vh;
+  }
+  
+  .blogPagination .paginationNextSet {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .blogPagination a:hover,
+  .blogPagination a:focus,
+  .blogPagination a:active {
+    color: #886588ff;
+  }

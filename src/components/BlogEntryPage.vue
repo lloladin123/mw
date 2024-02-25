@@ -25,9 +25,9 @@
           <p class="text-muted">Published on January 1, 2023</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
           <div class="blog-post-edit w-100">
-            <button class="btn btn-primary">Create</button>
-            <button class="btn btn-primary">Delete</button>
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-md btn-primary">Create</button>
+            <button class="btn btn-md btn-primary">Delete</button>
+            <button class="btn btn-md btn-primary">Update</button>
           </div>
         </div>
         <div class="blog-post">
@@ -36,9 +36,9 @@
           <p class="text-muted">Published on January 1, 2023</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
           <div class="blog-post-edit w-100">
-            <button class="btn btn-primary">Create</button>
-            <button class="btn btn-primary">Delete</button>
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-md btn-primary">Create</button>
+            <button class="btn btn-md btn-primary">Delete</button>
+            <button class="btn btn-md btn-primary">Update</button>
           </div>
         </div>
         <div class="blog-post">
@@ -47,9 +47,9 @@
           <p class="text-muted">Published on January 1, 2023</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
           <div class="blog-post-edit w-100">
-            <button class="btn btn-primary">Create</button>
-            <button class="btn btn-primary">Delete</button>
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-md btn-primary">Create</button>
+            <button class="btn btn-md btn-primary">Delete</button>
+            <button class="btn btn-md btn-primary">Update</button>
           </div>
         </div>
       </div>
@@ -57,11 +57,11 @@
         <div id="BlogSideInner" class="m-2">
           <h2>Seneste opslag</h2>
           <ul>
-            <li><router-link to="/BlogPage?Id=1">BlogPost1</router-link></li>
-            <li><router-link to="/BlogPage?Id=2">BlogPost2</router-link></li>
-            <li><router-link to="/BlogPage?Id=3">BlogPost3</router-link></li>
-            <li><router-link to="/BlogPage?Id=4">BlogPost4</router-link></li>
-            <li><router-link to="/BlogPage?Id=5">BlogPost5</router-link></li>
+            <li><router-link to="/BlogPost?Id=1">BlogPost1</router-link></li>
+            <li><router-link to="/BlogPost?Id=2">BlogPost2</router-link></li>
+            <li><router-link to="/BlogPost?Id=3">BlogPost3</router-link></li>
+            <li><router-link to="/BlogPost?Id=4">BlogPost4</router-link></li>
+            <li><router-link to="/BlogPost?Id=5">BlogPost5</router-link></li>
           </ul>
           <h2>Arkiv</h2>
           <ul>
@@ -101,29 +101,6 @@ a {
   /* Enable wrapping for multiple rows */
 }
 
-.blogSearch {
-  margin: auto;
-  margin-top: 2vh;
-  width: 70%;
-}
-
-.blogPagination a {
-  margin: 1vh;
-  transition: color 0.1s ease-in-out 0.1s;
-  font-size: 3vh;
-}
-
-.blogPagination .paginationNextSet {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.blogPagination a:hover,
-.blogPagination a:focus,
-.blogPagination a:active {
-  color: #886588ff;
-}
-
 .blog-post {
   margin: 3vh;
   display: flex;
@@ -140,13 +117,17 @@ a {
 }
 
 .blog-post-edit button {
-  width: 20%;
   background-color: #886588ff;
   color: white;
 }
 
 #blogContainer .blog-post:nth-child(odd):not(:first-child):not(:last-child) {
   align-items: flex-end;
+}
+
+#blogContainer .blog-post:nth-child(odd) .blog-post-edit {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the end */
 }
 
 .blogImg {

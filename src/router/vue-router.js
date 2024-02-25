@@ -2,10 +2,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../components/HomePage.vue';
 import BlogEntryPage from '../components/BlogEntryPage.vue';
+import BlogPost from '../components/BlogPost.vue';
+import ServiceList from '../components/ServiceList.vue';
+import ContactPage from '../components/ContactPage.vue';
+
 
 const routes = [
   { path: '/', component: HomePage },
   { path: '/blog', component: BlogEntryPage },
+  { path: '/BlogPost', component: BlogPost},
+  { path: '/ServiceList', component: ServiceList},
+  { path: '/ContactPage', component: ContactPage},
 ];
 
 const router = createRouter({

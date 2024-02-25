@@ -17,7 +17,7 @@
               <router-link to="/OmMw" class="nav-link" exact active-class="active-nav-link">Om MW</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/Ydelser" class="nav-link" exact active-class="active-nav-link">Ydelser</router-link>
+              <router-link to="/ServiceList" class="nav-link" exact active-class="active-nav-link">Ydelser</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/Blog" class="nav-link" exact active-class="active-nav-link">Blog</router-link>
@@ -26,7 +26,7 @@
               <router-link to="/Events" class="nav-link" exact active-class="active-nav-link">Events</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/Kontakt" class="nav-link" exact active-class="active-nav-link">Kontakt</router-link>
+              <router-link to="/ContactPage" class="nav-link" exact active-class="active-nav-link">Kontakt</router-link>
             </li>
             <li id="lastNavLink" class="nav-item">
               <router-link to="/bibliotek" class="nav-link" exact active-class="active-nav-link">Bibliotek</router-link>
