@@ -18,58 +18,37 @@
             <a class="paginationNextSet" href="/">>></a>
 
           </div>
-        </div>
-        <div class="blog-post">
-          <h2>Sample Blog Post</h2>
-          <img class="blogImg" src="../assets/Images/blog.png">
-          <p class="text-muted">Published on January 1, 2023</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
-          <div class="blog-post-edit w-100">
-            <button class="btn btn-md btn-primary">Create</button>
-            <button class="btn btn-md btn-primary">Delete</button>
-            <button class="btn btn-md btn-primary">Update</button>
           </div>
-        </div>
-        <div class="blog-post">
-          <h2>Sample Blog Post</h2>
-          <img class="blogImg" src="../assets/Images/blog.png">
-          <p class="text-muted">Published on January 1, 2023</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
-          <div class="blog-post-edit w-100">
-            <button class="btn btn-md btn-primary">Create</button>
-            <button class="btn btn-md btn-primary">Delete</button>
-            <button class="btn btn-md btn-primary">Update</button>
-          </div>
-        </div>
-        <div class="blog-post">
-          <h2>Sample Blog Post</h2>
-          <img class="blogImg" src="../assets/Images/blog.png">
-          <p class="text-muted">Published on January 1, 2023</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...</p>
-          <div class="blog-post-edit w-100">
-            <button class="btn btn-md btn-primary">Create</button>
-            <button class="btn btn-md btn-primary">Delete</button>
-            <button class="btn btn-md btn-primary">Update</button>
-          </div>
-        </div>
+          <router-link :to="'/BlogPost?Id=' + blog.id" v-for="(blog, index) in filteredPosts" :key="index" class="blog-post">
+    <div>
+      <h2>{{ blog.title }}</h2>
+      <img class="blogImg" :src="blog.image">
+      <p class="text-muted">Published on {{ blog.date }}</p>
+      <p>{{ blog.content }}</p>
+      <div class="blog-post-edit w-100">
+        <button class="btn btn-md btn-primary">Create</button>
+        <button class="btn btn-md btn-primary">Delete</button>
+        <button class="btn btn-md btn-primary">Update</button>
+      </div>
+    </div>
+  </router-link>
+
       </div>
       <div id="blogSideContainer" class="col-3">
         <div id="BlogSideInner" class="m-2">
           <h2>Seneste opslag</h2>
           <ul>
-            <li><router-link to="/BlogPost?Id=1">BlogPost1</router-link></li>
-            <li><router-link to="/BlogPost?Id=2">BlogPost2</router-link></li>
-            <li><router-link to="/BlogPost?Id=3">BlogPost3</router-link></li>
-            <li><router-link to="/BlogPost?Id=4">BlogPost4</router-link></li>
-            <li><router-link to="/BlogPost?Id=5">BlogPost5</router-link></li>
+            <!-- Render links to recent blog posts -->
+            <li v-for="(blog, index) in recentPosts" :key="index">
+              <router-link :to="`/BlogPost?Id=${blog.id}`">{{ blog.title }}</router-link>
+            </li>
           </ul>
           <h2>Arkiv</h2>
           <ul>
-            <li><router-link to="/BlogPage?Year=2023">2023</router-link></li>
-            <li><router-link to="/BlogPage?Year=2022">2022</router-link></li>
-            <li><router-link to="/BlogPage?Year=2021">2021</router-link></li>
-            <li><router-link to="/BlogPage?Year=2020">2020</router-link></li>
-            <li><router-link to="/BlogPage?Year=2019">2019</router-link></li>
+            <!-- Render links to blog posts grouped by year -->
+            <li v-for="year in uniqueYears" :key="year">
+              <router-link :to="`/Blog?Year=${year}`">{{ year }}</router-link>
+            </li>
           </ul>
         </div>
       </div>
@@ -82,6 +61,52 @@ export default {
   name: 'BlogEntryPage',
   props: {
     msg: String
+  },
+  computed: {
+    blogs() {
+      return this.$store.getters.allBlogs;
+    },
+    // Example computed property to get recent blog posts (assuming sorted by date)
+    recentPosts() {
+      return this.blogs.slice(0, 5); // Get the first 5 recent posts
+    },
+    uniqueYears() {
+      const years = new Set();
+      this.blogs.forEach(blog => {
+        const year = new Date(blog.date).getFullYear();
+        years.add(year);
+      });
+      return Array.from(years).sort((a, b) => b - a); // Sort in descending order
+    },
+    filteredPosts() {
+      const yearParam = this.$route.query.Year;
+      if (yearParam) {
+        const year = parseInt(yearParam);
+        if (!isNaN(year)) {
+          // If the year is valid, filter the blog posts by that year
+          return this.blogs.filter(blog => new Date(blog.date).getFullYear() === year);
+        }
+      }
+      // If the 'Year' parameter is not provided or invalid, return all blog posts
+      return this.blogs;
+    }
+  },
+  methods: {
+    // Example method for search functionality
+    performSearch() {
+      // Implement search functionality here
+    },
+    filterPostsByYear(year) {
+      // Filter blog posts by the specified year
+      this.filteredPosts = this.blogs.filter(blog => {
+        return new Date(blog.date).getFullYear() === year;
+      });
+    }
+  },
+  mounted() {
+    // Fetch blogs when the component is mounted
+    this.$store.getters.allBlogs;
+    // Now you can use allBlogs variable to access the value of the getter
   }
 }
 </script>
@@ -127,7 +152,8 @@ a {
 
 #blogContainer .blog-post:nth-child(odd) .blog-post-edit {
   display: flex;
-  justify-content: flex-end; /* Align buttons to the end */
+  justify-content: flex-end;
+  /* Align buttons to the end */
 }
 
 .blogImg {
@@ -170,7 +196,4 @@ a {
 #BlogSideInner ul li a:active {
   color: #886588ff;
 }
-
-
-
 </style>
