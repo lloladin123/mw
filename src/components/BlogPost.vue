@@ -6,10 +6,11 @@
       <p class="text-muted">{{ blogPost.date }}</p>
       <p>{{ blogPost.content }}</p>
       <div class="blog-post-edit w-100">
-        <button class="btn btn-md btn-primary">Create</button>
-        <button class="btn btn-md btn-primary">Delete</button>
+        <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
+        <button class="btn btn-md btn-primary" @click="showDeleteConfirmation">Delete</button>
         <button class="btn btn-md btn-primary">Update</button>
       </div>
+      <DeletePost v-if="showConfirmation" :post="blogPost" @cancel="cancelDelete" @confirm="deletePost" />
     </div>
     <div v-else>
       ....loading
@@ -18,42 +19,50 @@
 </template>
 
 <script>
+import DeletePost from './DeletePost.vue';
+
 export default {
   name: 'BlogPost',
+  components: {
+    DeletePost
+  },
   props: {
     msg: String
   },
   data() {
     return {
-      blogPost: null
+      blogPost: null,
+      showConfirmation: false
     };
   },
   methods: {
     fetchBlogPost() {
-  const id = Number(this.$route.query.Id);
-  console.log('Id:', id);
-  const blogPost = this.$store.getters.getBlogById(id);
-  console.log('blogPost:', JSON.stringify(blogPost));
-  this.blogPost = blogPost; // Assigning to Vue data property
-}
-
+      const id = Number(this.$route.query.Id);
+      const blogPost = this.$store.getters.getBlogById(id);
+      this.blogPost = blogPost;
+    },
+    showDeleteConfirmation() {
+      this.showConfirmation = true;
+    },
+    cancelDelete() {
+      this.showConfirmation = false;
+    },
+    deletePost() {
+      this.$store.dispatch('deleteBlog', this.blogPost.id);
+      this.showConfirmation = false;
+    }
   },
   mounted() {
     this.fetchBlogPost();
   }
-}
+};
 </script>
-
 <style scoped>
 .headerImg{
   width: 50%;
 }
 
 p {
-  color: black;
-}
-
-a {
   color: black;
 }
 

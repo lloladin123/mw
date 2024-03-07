@@ -52,6 +52,18 @@ const actions = {
         }
       ]);
     }, 1000);
+  },
+    // Action to add a new blog post
+    addBlog({ commit }, blog) {
+      // Here you can perform any necessary logic before committing the mutation
+      // For example, you can validate the blog post data or make an API call to save it
+      commit('addBlog', blog);
+    },
+      // Delete a blog post
+  deleteBlog({ commit }, postId) {
+    // Perform any necessary logic before committing the mutation
+    // For example, you can validate the post ID or make an API call to delete the post
+    commit('removeBlog', postId);
   }
 };
 
@@ -59,7 +71,13 @@ const mutations = {
   // Example mutation to set blogs
   setBlogs: (state, blogs) => (state.blogs = blogs),
   // Mutation to set a single blog post by ID
-  setBlog: (state, blog) => (state.blog = blog)
+  setBlog: (state, blog) => (state.blog = blog),
+  // Mutation to add a singel blog post
+  addBlog: (state, blog) => state.blogs.push(blog),
+  // Mutation to delete a single blog post by ID
+  deleteBlog: (state, postId) => {
+    state.blogs = state.blogs.filter(blog => blog.id !== postId);
+  }
 };
 
 export default {

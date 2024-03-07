@@ -4,6 +4,8 @@
       <!-- Search Bar -->
       <div id="blogContainer" class="col-9">
         <div class="w-100">
+        <button class="btn btn-md btn-primary">Create</button>
+
           <input v-model="searchQuery" @input="performSearch" type="text" placeholder="Search blog posts..."
             class="form-control blogSearch" />
           <div class="d-flex justify-content-center blogPagination"> <!-- Center-align pagination items -->
@@ -26,7 +28,7 @@
       <p class="text-muted">Published on {{ blog.date }}</p>
       <p>{{ blog.content }}</p>
       <div class="blog-post-edit w-100">
-        <button class="btn btn-md btn-primary">Create</button>
+        <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
         <button class="btn btn-md btn-primary">Delete</button>
         <button class="btn btn-md btn-primary">Update</button>
       </div>
@@ -118,6 +120,10 @@ p {
 
 a {
   color: black;
+}
+
+.btn {
+  color: white;
 }
 
 #blogContainer {
