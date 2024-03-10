@@ -6,6 +6,7 @@ import BlogPost from '../components/BlogPost.vue';
 import ServiceList from '../components/ServiceList.vue';
 import ContactPage from '../components/ContactPage.vue';
 import CreatePost from '../components/CreatePost.vue';
+import UpdatePost from '../components/UpdatePost.vue';
 
 
 const routes = [
@@ -15,6 +16,8 @@ const routes = [
   { path: '/ServiceList', component: ServiceList},
   { path: '/ContactPage', component: ContactPage},
   { path: '/CreatePost', component: CreatePost},
+  { path: '/UpdatePost', component: UpdatePost},
+
 
 ];
 

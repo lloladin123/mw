@@ -8,7 +8,7 @@
       <p>{{ post.date }}</p>
       <div class="confirmation-buttons">
         <router-link :to="'/Blog'" class="btn" @click="confirmDelete">Yes</router-link>
-        <button class="btn" @click="confirmDelete">no</button>
+        <button class="btn" @click="cancelDelete">no</button>
       </div>
     </div>
   </div>

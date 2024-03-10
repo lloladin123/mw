@@ -8,7 +8,7 @@
       <div class="blog-post-edit w-100">
         <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
         <button class="btn btn-md btn-primary" @click="showDeleteConfirmation">Delete</button>
-        <button class="btn btn-md btn-primary">Update</button>
+        <router-link :to="{ path: '/UpdatePost', query: { Id: blogPost.id } }" class="btn btn-md btn-primary">Update</router-link>
       </div>
       <DeletePost v-if="showConfirmation" :post="blogPost" @cancel="cancelDelete" @confirm="deletePost" />
     </div>
@@ -32,24 +32,31 @@ export default {
   data() {
     return {
       blogPost: null,
-      showConfirmation: false
+      showConfirmation: false,
+      postId: null // Store the ID of the blog post
     };
   },
   methods: {
     fetchBlogPost() {
-      const id = Number(this.$route.query.Id);
+      const id = Number(this.$route.query.Id || this.postId); // Use postId if available
       const blogPost = this.$store.getters.getBlogById(id);
-      this.blogPost = blogPost;
+      this.blogPost = blogPost !== undefined ? blogPost : null;
     },
     showDeleteConfirmation() {
       this.showConfirmation = true;
     },
     cancelDelete() {
       this.showConfirmation = false;
+      // No need to update the route query, just use postId to fetch the blog post
+      this.fetchBlogPost();
     },
     deletePost() {
-      this.$store.dispatch('deleteBlog', this.blogPost.id);
-      this.showConfirmation = false;
+      if (this.blogPost !== null) {
+        this.$store.dispatch('deleteBlog', this.blogPost.id);
+        this.showConfirmation = false;
+      } else {
+        console.error('blogPost is undefined');
+      }
     }
   },
   mounted() {
@@ -57,30 +64,26 @@ export default {
   }
 };
 </script>
+
 <style scoped>
-.headerImg{
+.headerImg {
   width: 50%;
 }
-
 p {
   color: black;
 }
-
 .container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;
   /* Added to vertically center the content */
 }
-
 .blog-post {
   text-align: center;
 }
-
 .blogImg {
   width: 40%;
 }
-
 .blog-post-edit button {
   background-color: #886588ff;
   color: white;

@@ -1,61 +1,64 @@
-<!-- ConfirmationBox.vue -->
 <template>
-  <div class="confirmation-box" v-if="show">
-    <div class="confirmation-box-content">
-      <h3>{{ post.title }}</h3>
-      <p>{{ post.content }}</p>
-      <div class="confirmation-buttons">
-        <button @click="confirmDelete">Yes</button>
-        <button @click="cancelDelete">No</button>
-      </div>
+  <form @submit.prevent="addBlog" class="container mt-5">
+    <div class="form-group m-2">
+      <h1>Create Post</h1>
     </div>
-  </div>
+    <div class="form-group m-2">
+      <input type="text" v-model="title" placeholder="Title" class="form-control">
+    </div>
+    <div class="form-group m-2">
+      <textarea v-model="content" placeholder="Content" class="form-control"></textarea>
+    </div>
+    <div class="form-group m-2">
+      <input type="file" @change="handleImageUpload" accept="image/*" class="form-control-file">
+    </div>
+    <button type="submit" class="btn btn-primary m-2">Add Blog</button>
+  </form>
 </template>
 
 <script>
 export default {
-  props: ['post'],
   data() {
     return {
-      show: true
+      title: '',
+      date: '',
+      content: '',
+      image: null
     };
   },
   methods: {
-    confirmDelete() {
-      // Delete the post using the store
-      this.$store.commit('deleteBlog', this.post.id);
-      this.closeConfirmationBox();
+    addBlog() {
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${('0' + (now.getMonth() + 1)).slice(-2)}-${('0' + now.getDate()).slice(-2)} Klokken: ${('0' + now.getHours()).slice(-2)}:${('0' + now.getMinutes()).slice(-2)}`;
+
+      const newBlog = {
+        id: Date.now(), // Generate a unique ID
+        title: this.title,
+        date: formattedDate,
+        content: this.content,
+        image: this.image // Assign the selected image
+      };
+      this.$store.commit('addBlog', newBlog);
+      // Optionally, you can dispatch an action to save the new post to the server
+      // this.$store.dispatch('saveBlog', newBlog);
+      this.$router.push('/Blog'); // Redirect to the blogs page
     },
-    cancelDelete() {
-      this.closeConfirmationBox();
-    },
-    closeConfirmationBox() {
-      this.show = false;
+    handleImageUpload(event) {
+      // Access the uploaded file
+      const file = event.target.files[0];
+      // Convert the file to a data URL
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Set the data URL as the image
+        this.image = reader.result;
+      };
     }
   }
 };
 </script>
 
 <style scoped>
-.confirmation-box {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.confirmation-box-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-.confirmation-buttons button {
-  margin: 0 10px;
-}
+/* You can add custom styles here if needed */
 </style>

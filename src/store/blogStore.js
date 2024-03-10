@@ -64,6 +64,11 @@ const actions = {
     // Perform any necessary logic before committing the mutation
     // For example, you can validate the post ID or make an API call to delete the post
     commit('removeBlog', postId);
+  },
+  updateBlog({ commit }, { id, updatedBlog }) {
+    // Perform any necessary logic before committing the mutation
+    // For example, you can validate the post ID or make an API call to update the post
+    commit('updateBlog', { id, updatedBlog });
   }
 };
 
@@ -77,6 +82,14 @@ const mutations = {
   // Mutation to delete a single blog post by ID
   deleteBlog: (state, postId) => {
     state.blogs = state.blogs.filter(blog => blog.id !== postId);
+  },
+  // Mutation to Update a single blog post
+  updateBlog: (state, { id, updatedBlog }) => {
+    const index = state.blogs.findIndex(blog => blog.id === id);
+    if (index !== -1) {
+      // Replace the old blog post with the updated one
+      state.blogs.splice(index, 1, { ...state.blogs[index], ...updatedBlog });
+    }
   }
 };
 

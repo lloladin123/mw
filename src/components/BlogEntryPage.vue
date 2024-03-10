@@ -4,10 +4,11 @@
       <!-- Search Bar -->
       <div id="blogContainer" class="col-9">
         <div class="w-100">
-        <button class="btn btn-md btn-primary">Create</button>
-
-          <input v-model="searchQuery" @input="performSearch" type="text" placeholder="Search blog posts..."
-            class="form-control blogSearch" />
+          <div class="d-flex justify-content-between align-items-center m-3 mb-3">
+            <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
+            <input v-model="searchQuery" @input="performSearch" type="text" placeholder="Search blog posts..."
+              class="form-control blogSearch" />
+          </div>
           <div class="d-flex justify-content-center blogPagination"> <!-- Center-align pagination items -->
             <a class="paginationNextSet" href="/">&lt;&lt;</a>
             <a href="/">&lt;</a>
@@ -20,21 +21,24 @@
             <a class="paginationNextSet" href="/">>></a>
 
           </div>
-          </div>
-          <router-link :to="'/BlogPost?Id=' + blog.id" v-for="(blog, index) in filteredPosts" :key="index" class="blog-post">
-    <div>
-      <h2>{{ blog.title }}</h2>
-      <img class="blogImg" :src="blog.image">
-      <p class="text-muted">Published on {{ blog.date }}</p>
-      <p>{{ blog.content }}</p>
-      <div class="blog-post-edit w-100">
-        <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
-        <button class="btn btn-md btn-primary">Delete</button>
-        <button class="btn btn-md btn-primary">Update</button>
-      </div>
-    </div>
-  </router-link>
-
+        </div>
+        <div v-for="(blog, index) in filteredPosts" :key="index" class="blog-post">
+          <router-link :to="'/BlogPost?Id=' + blog.id">
+            <div>
+              <h2>{{ blog.title }}</h2>
+              <img class="blogImg" :src="blog.image">
+              <p class="text-muted">Published on {{ blog.date }}</p>
+              <p>{{ blog.content }}</p>
+              <div class="blog-post-edit w-100">
+                <router-link class="btn btn-md btn-primary" :to="'/CreatePost'">Create</router-link>
+                <button class="btn btn-md btn-primary" @click.prevent="showDeleteConfirmation(blog)">Delete</button>
+                <router-link :to="'/UpdatePost?Id=' + blog.id" class="btn btn-md btn-primary">Update</router-link>
+              </div>
+            </div>
+          </router-link>
+          <DeletePost v-if="showConfirmation && blog === blogToDelete" :post="blog" @cancel="cancelDelete"
+            @confirm="deletePost" />
+        </div>
       </div>
       <div id="blogSideContainer" class="col-3">
         <div id="BlogSideInner" class="m-2">
@@ -59,10 +63,23 @@
 </template>
 
 <script>
+import DeletePost from './DeletePost.vue';
+
 export default {
   name: 'BlogEntryPage',
   props: {
     msg: String
+  },
+  components: {
+    DeletePost
+  },
+  data() {
+    return {
+      // Add data properties here
+      showConfirmation: false,
+      blogToDelete: null,
+      searchQuery: ''
+    };
   },
   computed: {
     blogs() {
@@ -103,6 +120,25 @@ export default {
       this.filteredPosts = this.blogs.filter(blog => {
         return new Date(blog.date).getFullYear() === year;
       });
+    },
+    showDeleteConfirmation(blog) {
+      // Show delete confirmation dialog
+      this.blogToDelete = blog;
+      this.showConfirmation = true;
+    },
+    cancelDelete() {
+      // Cancel delete operation
+      this.showConfirmation = false;
+      this.blogToDelete = null;
+    },
+    deletePost() {
+      this.$store.dispatch('deleteBlog', this.blogToDelete.id)
+        .then(() => {
+          // Blog post deleted successfully
+          // Reset the values
+          this.blogToDelete = null;
+          this.showConfirmation = false;
+        })
     }
   },
   mounted() {
@@ -153,6 +189,7 @@ a {
 }
 
 #blogContainer .blog-post:nth-child(odd):not(:first-child):not(:last-child) {
+  display: flex;
   align-items: flex-end;
 }
 
