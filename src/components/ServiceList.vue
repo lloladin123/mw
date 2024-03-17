@@ -19,7 +19,8 @@
       :total-pages="totalPages" 
       @nextPage="nextPage" 
       @previousPage="previousPage" 
-      @goToPage="goToPage"  
+      @goToPage="goToPage"
+      :visiblePageCount="visiblePageCount"  
     />
 
     <!-- Display the paginated service items -->
@@ -57,7 +58,7 @@ export default {
       selectedCategory: "",
       currentPage: 1, // Current page number
       totalPages: 0, // Total number of pages
-      itemsPerPage: 1, // Number of items per page
+      visiblePageCount: 2, // Set the value you want for visiblePageCount
     };
   },
   components: {
@@ -78,8 +79,8 @@ export default {
     },
     // Calculate paginated services
     paginatedServices() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      const endIndex = startIndex + this.itemsPerPage;
+      const startIndex = (this.currentPage - 1) * this.visiblePageCount;
+      const endIndex = startIndex + this.visiblePageCount;
       return this.filteredServices.slice(startIndex, endIndex);
     }
   },
@@ -108,7 +109,7 @@ export default {
     // Watch for changes in filteredServices and recalculate total pages
     filteredServices: {
       handler() {
-        this.totalPages = Math.ceil(this.filteredServices.length / this.itemsPerPage);
+        this.totalPages = Math.ceil(this.filteredServices.length / this.visiblePageCount);
         if (this.currentPage > this.totalPages) {
           this.currentPage = this.totalPages;
         }

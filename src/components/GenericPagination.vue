@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center blogPagination">
+  <div v-if="totalPages > 0" class="d-flex justify-content-center blogPagination">
     <!-- Skip backward 7 pages button -->
     <a class="paginationButton" :class="{ disabled: currentPage <= 7 }" @click="skipBackward">&lt;&lt;</a>
 
@@ -55,15 +55,23 @@ export default {
     },
     visiblePages() {
       let startPage = 1;
-      const endPage = this.lastVisiblePage;
+      let endPage = this.lastVisiblePage;
 
       if (this.currentPage > this.visiblePageCount) {
         const setIndex = Math.ceil(this.currentPage / this.visiblePageCount);
         startPage = (setIndex - 1) * this.visiblePageCount + 1;
       }
 
-      return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
+      const pageCount = endPage - startPage + 1; // Calculate the initial page count
+
+      if (this.currentPage >= this.totalPages - this.visiblePageCount / 2) {
+        // If we're on the last set of pages, add 1 to the page count
+        endPage++;
+      }
+
+      return Array.from({ length: pageCount }, (_, index) => startPage + index);
     }
+
   },
   methods: {
     previousPage() {

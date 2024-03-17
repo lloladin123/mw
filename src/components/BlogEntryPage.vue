@@ -10,7 +10,10 @@
               class="form-control blogSearch" />
           </div>
           <!-- Pagination -->
-          <GenericPagination :current-page="currentPage" :total-pages="totalPages" @nextPage="nextPage" @previousPage="previousPage" @goToPage="goToPage"  />
+          <GenericPagination :current-page="currentPage" :total-pages="totalPages" @nextPage="nextPage"
+            @previousPage="previousPage" @goToPage="goToPage" />
+            <h1 class="ms-3" v-if="selectedYear">År {{ selectedYear }}</h1>
+            <h1 class="ms-3" v-else>Blog side</h1>
         </div>
         <!-- Render blog posts based on the current page -->
         <div v-for="(blog, index) in paginatedPosts" :key="index" class="blog-post">
@@ -44,7 +47,7 @@
           <ul>
             <!-- Render links to blog posts grouped by year -->
             <li v-for="year in uniqueYears" :key="year">
-              <router-link :to="`/Blog?Year=${year}`">{{ year }}</router-link>
+              <a @click="filterPostsByYear(year)">{{ year }}</a>
             </li>
           </ul>
         </div>
@@ -74,8 +77,9 @@ export default {
       searchQuery: '',
       currentPage: 1, // Current page number
       totalPages: 0, // Total number of pages
-      itemsPerPage: 1, // Number of items per page
-      filteredPosts: [] // Initialize filteredPosts array
+      itemsPerPage: 3, // Number of items per page
+      filteredPosts: [], // Initialize filteredPosts array
+      selectedYear: null // Store the selected year
     };
   },
   computed: {
@@ -105,14 +109,6 @@ export default {
     // Example method for search functionality
     performSearch() {
       // Implement search functionality here
-    },
-    filterPostsByYear(year) {
-      // Filter blog posts by the specified year
-      this.filteredPosts = this.blogs.filter(blog => {
-        return new Date(blog.date).getFullYear() === year;
-      });
-      // Recalculate total pages
-      this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
     },
     showDeleteConfirmation(blog) {
       // Show delete confirmation dialog
@@ -144,12 +140,29 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
-    },    // Method to handle page navigation
+    },
+    // Method to handle page navigation
     goToPage(page) {
       // Set currentPage to the clicked page
       this.currentPage = page;
       // You might want to fetch paginated data here based on the new currentPage
-    }
+    },
+// Method to filter posts by year
+filterPostsByYear(year) {
+  // Update the selectedYear
+  this.selectedYear = year;
+  // Filter blog posts by the specified year
+  this.filteredPosts = this.blogs.filter(blog => {
+    return new Date(blog.date).getFullYear() === year;
+  });
+  // Recalculate total pages based on the number of filtered posts
+  this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
+  // Reset currentPage to 1 if the total pages are less than the current page
+  if (this.currentPage > this.totalPages) {
+    this.goToPage(1);
+  }
+}
+
   },
   mounted() {
     // Fetch blogs when the component is mounted
