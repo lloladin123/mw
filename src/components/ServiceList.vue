@@ -13,10 +13,18 @@
     </div>
 
     <h1 class="text-center mt-5">Our Services</h1>
+    <!-- Use the GenericPagination component -->
+    <GenericPagination 
+      :current-page="currentPage" 
+      :total-pages="totalPages" 
+      @nextPage="nextPage" 
+      @previousPage="previousPage" 
+      @goToPage="goToPage"  
+    />
 
-    <!-- Service cards -->
-    <div v-if="filteredServices.length > 0" class="row mt-4">
-      <div class="col-md-4" v-for="service in filteredServices" :key="service.id">
+    <!-- Display the paginated service items -->
+    <div v-if="paginatedServices.length > 0" class="row mt-4">
+      <div class="col-md-4" v-for="service in paginatedServices" :key="service.id">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">{{ service.name }}</h5>
@@ -40,12 +48,20 @@
 </template>
 
 <script>
+import GenericPagination from './GenericPagination.vue';
+
 export default {
   name: 'ServiceList',
   data() {
     return {
-      selectedCategory: ""
+      selectedCategory: "",
+      currentPage: 1, // Current page number
+      totalPages: 0, // Total number of pages
+      itemsPerPage: 1, // Number of items per page
     };
+  },
+  components: {
+    GenericPagination
   },
   computed: {
     categories() {
@@ -59,17 +75,47 @@ export default {
       } else {
         return allServices.filter(service => service.category === this.selectedCategory);
       }
+    },
+    // Calculate paginated services
+    paginatedServices() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.filteredServices.slice(startIndex, endIndex);
     }
   },
-methods: {
-  async selectCategory(category) {
-    await this.$store.dispatch('selectCategory', category); // Wait for the action to complete
-    console.log(this.$store.getters.selectedCategory); // Now it should have the updated value
-    this.$store.commit('setSelectedCategory', category);
-    this.selectedCategory = this.$store.getters.selectedCategory
+  methods: {
+    async selectCategory(category) {
+      await this.$store.dispatch('selectCategory', category);
+      this.$store.commit('setSelectedCategory', category);
+      this.selectedCategory = this.$store.getters.selectedCategory;
+      this.currentPage = 1; // Reset to the first page when category changes
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    goToPage(page) {
+      this.currentPage = page;
+    }
+  },
+  watch: {
+    // Watch for changes in filteredServices and recalculate total pages
+    filteredServices: {
+      handler() {
+        this.totalPages = Math.ceil(this.filteredServices.length / this.itemsPerPage);
+        if (this.currentPage > this.totalPages) {
+          this.currentPage = this.totalPages;
+        }
+      },
+      immediate: true
+    }
   }
-}
-
 };
 </script>
 

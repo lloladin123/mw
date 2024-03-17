@@ -9,20 +9,11 @@
             <input v-model="searchQuery" @input="performSearch" type="text" placeholder="Search blog posts..."
               class="form-control blogSearch" />
           </div>
-          <div class="d-flex justify-content-center blogPagination"> <!-- Center-align pagination items -->
-            <a class="paginationNextSet" href="/">&lt;&lt;</a>
-            <a href="/">&lt;</a>
-            <router-link to="/BlogPage?Page=1">1</router-link>
-            <router-link to="/BlogPage?Page=2">2</router-link>
-            <router-link to="/BlogPage?Page=3">3</router-link>
-            <router-link to="/BlogPage?Page=4">4</router-link>
-            <router-link to="/BlogPage?Page=5">5</router-link>
-            <a href="/">></a>
-            <a class="paginationNextSet" href="/">>></a>
-
-          </div>
+          <!-- Pagination -->
+          <GenericPagination :current-page="currentPage" :total-pages="totalPages" @nextPage="nextPage" @previousPage="previousPage" @goToPage="goToPage"  />
         </div>
-        <div v-for="(blog, index) in filteredPosts" :key="index" class="blog-post">
+        <!-- Render blog posts based on the current page -->
+        <div v-for="(blog, index) in paginatedPosts" :key="index" class="blog-post">
           <router-link :to="'/BlogPost?Id=' + blog.id">
             <div>
               <h2>{{ blog.title }}</h2>
@@ -64,6 +55,7 @@
 
 <script>
 import DeletePost from './DeletePost.vue';
+import GenericPagination from './GenericPagination.vue';
 
 export default {
   name: 'BlogEntryPage',
@@ -71,14 +63,19 @@ export default {
     msg: String
   },
   components: {
-    DeletePost
+    DeletePost,
+    GenericPagination
   },
   data() {
     return {
       // Add data properties here
       showConfirmation: false,
       blogToDelete: null,
-      searchQuery: ''
+      searchQuery: '',
+      currentPage: 1, // Current page number
+      totalPages: 0, // Total number of pages
+      itemsPerPage: 1, // Number of items per page
+      filteredPosts: [] // Initialize filteredPosts array
     };
   },
   computed: {
@@ -97,17 +94,11 @@ export default {
       });
       return Array.from(years).sort((a, b) => b - a); // Sort in descending order
     },
-    filteredPosts() {
-      const yearParam = this.$route.query.Year;
-      if (yearParam) {
-        const year = parseInt(yearParam);
-        if (!isNaN(year)) {
-          // If the year is valid, filter the blog posts by that year
-          return this.blogs.filter(blog => new Date(blog.date).getFullYear() === year);
-        }
-      }
-      // If the 'Year' parameter is not provided or invalid, return all blog posts
-      return this.blogs;
+    // Filtered blog posts to display based on the current page
+    paginatedPosts() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.filteredPosts.slice(startIndex, endIndex);
     }
   },
   methods: {
@@ -120,6 +111,8 @@ export default {
       this.filteredPosts = this.blogs.filter(blog => {
         return new Date(blog.date).getFullYear() === year;
       });
+      // Recalculate total pages
+      this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
     },
     showDeleteConfirmation(blog) {
       // Show delete confirmation dialog
@@ -138,16 +131,38 @@ export default {
           // Reset the values
           this.blogToDelete = null;
           this.showConfirmation = false;
-        })
+          // Recalculate total pages
+          this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
+        });
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },    // Method to handle page navigation
+    goToPage(page) {
+      // Set currentPage to the clicked page
+      this.currentPage = page;
+      // You might want to fetch paginated data here based on the new currentPage
     }
   },
   mounted() {
     // Fetch blogs when the component is mounted
     this.$store.getters.allBlogs;
-    // Now you can use allBlogs variable to access the value of the getter
+    // Initialize filteredPosts array
+    this.filteredPosts = this.blogs;
+    // Calculate the total number of pages based on the number of blog posts
+    this.totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
   }
 }
 </script>
+
+
 
 <style scoped>
 p {

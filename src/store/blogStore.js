@@ -22,10 +22,96 @@ const state = {
       image: require('@/assets/Images/blog.png'),
       date: 'January 3, 2019',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    // Add more blog posts here
+    {
+      id: 4,
+      title: 'Sample Blog Post 4',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 4, 2023',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 5,
+      title: 'Sample Blog Post 5',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 5, 2021',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 6,
+      title: 'Sample Blog Post 6',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 6, 2019',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 7,
+      title: 'Sample Blog Post 7',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 7, 2023',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 8,
+      title: 'Sample Blog Post 8',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 8, 2021',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 9,
+      title: 'Sample Blog Post 9',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 9, 2019',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 10,
+      title: 'Sample Blog Post 10',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 10, 2023',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 11,
+      title: 'Sample Blog Post 11',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 11, 2021',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 12,
+      title: 'Sample Blog Post 12',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 12, 2019',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 13,
+      title: 'Sample Blog Post 13',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 13, 2023',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 14,
+      title: 'Sample Blog Post 14',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 14, 2021',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
+    },
+    {
+      id: 15,
+      title: 'Sample Blog Post 15',
+      image: require('@/assets/Images/blog.png'),
+      date: 'January 15, 2019',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum, nulla ut ullamcorper aliquet...'
     }
   ],
   blog: null // Add a property to store a single blog post
 };
+
 
 const getters = {
   // Example getter to retrieve all blogs
